@@ -1,0 +1,89 @@
+import tkinter
+import gui
+
+_font = ('Helvetica', 20)
+class open_window:
+    def __init__(self):
+        self._root_window = tkinter.Tk()
+        self.open_label = tkinter.Label(self._root_window,
+                                     text = 'Welcome to Othello Game',
+                                     font = _font,
+                                     fg = 'black')
+        self.open_label.grid(row = 0, column = 1, padx = 10, pady = 10, sticky = tkinter.N)
+
+        self._row_label = tkinter.Label(self._root_window,
+                                      text = 'Please choose a row number:',
+                                      font = _font,
+                                      fg = 'blue')
+        self._row_label.grid(row = 1, column = 0, padx = 10, pady = 10, sticky = tkinter.W)
+        self._prerownum = tkinter.IntVar(self._root_window)
+        self._prerownum.set("4")
+        self._choice1 = tkinter.OptionMenu(self._root_window,self._prerownum, "4", "6", "8", "10", "12", "14", "16")
+        self._choice1.grid(row = 1, column = 2, sticky = tkinter.W)
+
+        self._col_label = tkinter.Label(self._root_window,
+                                      text = 'Please choose a column number:',
+                                      font = _font,
+                                      fg = 'blue')
+        self._col_label.grid(row = 2, column = 0, padx = 10, pady = 10, sticky = tkinter.W)
+        self._precolnum = tkinter.IntVar(self._root_window)
+        self._precolnum.set("4")
+        self._choice2 = tkinter.OptionMenu(self._root_window,self._precolnum, "4", "6", "8", "10", "12", "14", "16")
+        self._choice2.grid(row = 2, column = 2, sticky = tkinter.W)
+
+        self._topleft_label = tkinter.Label(self._root_window,
+                                                  text = 'Please choose the TopLeft:',
+                                                  font = _font,
+                                                  fg = 'blue')
+        self._topleft_label.grid(row = 3, column = 0, padx =10, pady = 10, sticky = tkinter.W)
+        self._pretopleft = tkinter.StringVar(self._root_window)
+        self._pretopleft.set('black')
+        self._choice3 = tkinter.OptionMenu(self._root_window, self._pretopleft, "black", "white")
+        self._choice3.grid(row = 3, column = 2, sticky = tkinter.W)
+
+
+        self._win_label = tkinter.Label(self._root_window,
+                                          text = 'Please choose One Way to Win:',
+                                          font = _font,
+                                          fg = 'blue')
+        self._win_label.grid(row = 4, column = 0, padx = 10, pady = 10, sticky = tkinter.W)
+        self._winway = tkinter.StringVar(self._root_window)
+        self._winway.set('More pieces player win')
+        self._choice4 = tkinter.OptionMenu(self._root_window, self._winway, "More pieces palyer win", "Less pieces player win")
+        self._choice4.grid(row = 4, column = 2, sticky = tkinter.W)
+
+        self._movefirst_label = tkinter.Label(self._root_window,
+                                          text = 'Please choose who moves first:',
+                                          font = _font,
+                                          fg = 'blue')
+        self._movefirst_label.grid(row = 5, column = 0, padx = 10, pady = 10, sticky = tkinter.W)
+        self._movefirst = tkinter.StringVar(self._root_window)
+        self._movefirst.set('black')
+        self._choice5 = tkinter.OptionMenu(self._root_window, self._movefirst, "black", "white")
+        self._choice5.grid(row = 5, column = 2, sticky = tkinter.W)
+
+
+        self._ok_button = tkinter.Button(self._root_window,
+                                          text = 'Ok',
+                                          font = _font,
+                                          fg = 'orange',
+                                          command = gui._ok_clicked)
+        self._ok_button.grid(row = 6, column = 1, padx = 10, pady = 10, sticky = tkinter.E)
+
+        self._cancel_button = tkinter.Button(self._root_window,
+                                             text = 'Quit',
+                                             font = _font,
+                                             fg = 'red',
+                                             command = self._cancel_clicked)
+        self._cancel_button.grid(row = 6, column = 2, padx = 10, pady = 10, sticky = tkinter.W)
+
+
+        self._root_window.rowconfigure(0, weight = 1)
+        self._root_window.rowconfigure(1, weight = 1)
+        self._root_window.rowconfigure(2, weight = 1)
+        self._root_window.rowconfigure(3, weight = 1)
+        self._root_window.rowconfigure(4, weight = 1)
+        self._root_window.rowconfigure(5, weight = 1)
+        self._root_window.columnconfigure(0, weight = 1)
+        self._root_window.columnconfigure(2, weight = 1)
+        self._root_window.columnconfigure(1, weight = 1)
