@@ -1,0 +1,204 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*,cover
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+##ming sun 90147770 
+
+import gamelogic as g
+
+
+def _gameboard(row: int, column: int, piece:str):
+        board = []
+        for col in range(int(row)):
+            board.append([])
+            for row in range(int(column)):
+                board[-1].append(piece)
+        return board
+
+
+def count_pieces(board: list, color: str) -> int:
+    count = 0
+
+    for a in board:
+        for b in a:
+            if b == color:
+                    
+                count += 1
+    return count
+
+
+def set_discs(board:list, top_left:str, row: int, column: int ):
+    row = int(row)
+    column = int(column)
+
+    if top_left == 'black':
+        board[int(row/2 - 1)][int(column/2 - 1)] = 'B'
+        board[int(row/2)][int(column/2)] = 'B'
+        
+        board[int(row/2)][int(column/2 - 1)] = 'W'
+        board[int(row/2 - 1)][int(column/2)] = 'W'
+        return board
+    
+    elif top_left == 'white':
+        board[int(row/2 - 1)][int(column/2 - 1)] = 'W'
+        board[int(row/2)][int(column/2)] = 'W'
+        board[int(row/2)][int(column/2 - 1)] = 'B'
+        board[int(row/2 - 1)][int(column/2)] = 'B'
+        return board
+
+
+
+
+
+
+
+def full_name(player:str):
+    if player == 'W':
+        return 'White'
+    else:
+        return 'Black'
+
+
+def turn_determine(move_first: str) -> str:
+    if move_first.upper() == 'BLACK':
+        print()
+        return 'B'
+    elif move_first.upper() == 'WHITE':
+        print()
+        return 'W'
+    else:
+        new_move_first = input('please enter a valid word.\n')
+        return turn_determine(new_move_first)
+    
+
+
+def print_board(turn:str, blackpiece, whitepiece, board):
+    print("It's {} play's turn.             Black piece:{}           White piece:{}".format\
+          (full_name(turn), blackpiece, whitepiece))
+    print('----------------------------------------------------------------')
+    for a in board:
+        for b in range(len(a) + 1):
+            print('{:<2d}'.format(b), end=' ')
+        print()
+        break
+    for c in range(len(board)):
+        print('{:<2d}'.format(c + 1), end = ' ')
+        for d in board[c]:
+    
+            print(d, end = '  ')
+        print()
+    print()
+
+
+
+def start_game():
+        while True:
+                row = int(input('Please enter a even integer as a row number\n'))
+                column = int(input('Please enter a even integer as a column number\n'))
+                if not (4<=row<=16 and 4<=column<=16 and not (row%2 or column%2)):
+                        print('The number of rows and columns should be even numbers between 4 and 16.')
+                        print('Please try again.')
+                else:
+                     break
+
+        sides = ['.', 'W', 'B']
+        turn  = turn_determine('black')
+
+        board = _gameboard(row, column, '.')
+        new_board = set_discs(board, 'white', row, column)
+
+
+        c = g.game_logic(row, column, 'white', 'B',board, sides, )
+        blackpiece = count_pieces(new_board, sides[2])
+        whitepiece = count_pieces(new_board, sides[1])
+
+        print_board(turn, blackpiece, whitepiece,board)
+
+        while True:
+            col1 = int(input('Please enter the column number that you want to drop a piece\n'))
+            row1  = int(input('Please enter the row number that you want to drop a piece\n'))
+            print()
+            print()
+            try:
+                c.check_move()
+                c.double_illegal()
+                try:
+                    turn = c.make_move(row1,col1)
+                    blackpiece = count_pieces(new_board, sides[2])
+                    whitepiece = count_pieces(new_board, sides[1])
+                    print_board(turn, blackpiece, whitepiece,board )
+                    try:
+                        c.check_move()
+                    except:
+                           turn = c._turn
+                           print_board(turn, blackpiece, whitepiece,board)
+                           try:
+                               c.check_move()
+                           except:
+                                  c.winner()
+                                  c.win()
+                                  break
+                except:
+                    print('try again')
+            except:
+                    c.winner()
+                    c.win()
+                    break
+if __name__ == '__main__':
+        start_game()
+
+
