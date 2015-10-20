@@ -1,0 +1,259 @@
+#ming sun 
+import tkinter
+import Othellogamelogic as g
+
+_font = ('Helvetica', 20)
+class open_window:
+    def __init__(self):
+        self._root_window = tkinter.Tk()
+        self.open_label = tkinter.Label(self._root_window,
+                                     text = 'Welcome to Othello Game',
+                                     font = _font,
+                                     fg = 'black')
+        self.open_label.grid(row = 0, column = 1, padx = 10, pady = 10, sticky = tkinter.N)
+
+        self._row_label = tkinter.Label(self._root_window,
+                                      text = 'Please choose a row number:',
+                                      font = _font,
+                                      fg = 'blue')
+        self._row_label.grid(row = 1, column = 0, padx = 10, pady = 10, sticky = tkinter.W)
+        self._prerownum = tkinter.IntVar(self._root_window)
+        self._prerownum.set("4")
+        self._choice1 = tkinter.OptionMenu(self._root_window,self._prerownum, "4", "6", "8", "10", "12", "14", "16")
+        self._choice1.grid(row = 1, column = 2, sticky = tkinter.W)
+
+        self._col_label = tkinter.Label(self._root_window,
+                                      text = 'Please choose a column number:',
+                                      font = _font,
+                                      fg = 'blue')
+        self._col_label.grid(row = 2, column = 0, padx = 10, pady = 10, sticky = tkinter.W)
+        self._precolnum = tkinter.IntVar(self._root_window)
+        self._precolnum.set("4")
+        self._choice2 = tkinter.OptionMenu(self._root_window,self._precolnum, "4", "6", "8", "10", "12", "14", "16")
+        self._choice2.grid(row = 2, column = 2, sticky = tkinter.W)
+
+        self._topleft_label = tkinter.Label(self._root_window,
+                                                  text = 'Please choose the TopLeft:',
+                                                  font = _font,
+                                                  fg = 'blue')
+        self._topleft_label.grid(row = 3, column = 0, padx =10, pady = 10, sticky = tkinter.W)
+        self._pretopleft = tkinter.StringVar(self._root_window)
+        self._pretopleft.set('black')
+        self._choice3 = tkinter.OptionMenu(self._root_window, self._pretopleft, "black", "white")
+        self._choice3.grid(row = 3, column = 2, sticky = tkinter.W)
+
+
+        self._win_label = tkinter.Label(self._root_window,
+                                          text = 'Please choose One Way to Win:',
+                                          font = _font,
+                                          fg = 'blue')
+        self._win_label.grid(row = 4, column = 0, padx = 10, pady = 10, sticky = tkinter.W)
+        self._winway = tkinter.StringVar(self._root_window)
+        self._winway.set('More pieces player win')
+        self._choice4 = tkinter.OptionMenu(self._root_window, self._winway, "More pieces palyer win", "Less pieces player win")
+        self._choice4.grid(row = 4, column = 2, sticky = tkinter.W)
+
+        self._movefirst_label = tkinter.Label(self._root_window,
+                                          text = 'Please choose who moves first:',
+                                          font = _font,
+                                          fg = 'blue')
+        self._movefirst_label.grid(row = 5, column = 0, padx = 10, pady = 10, sticky = tkinter.W)
+        self._movefirst = tkinter.StringVar(self._root_window)
+        self._movefirst.set('black')
+        self._choice5 = tkinter.OptionMenu(self._root_window, self._movefirst, "black", "white")
+        self._choice5.grid(row = 5, column = 2, sticky = tkinter.W)
+
+
+        self._ok_button = tkinter.Button(self._root_window,
+                                          text = 'Ok',
+                                          font = _font,
+                                          fg = 'orange',
+                                          command = self._ok_clicked)
+        self._ok_button.grid(row = 6, column = 1, padx = 10, pady = 10, sticky = tkinter.E)
+
+        self._cancel_button = tkinter.Button(self._root_window,
+                                             text = 'Quit',
+                                             font = _font,
+                                             fg = 'red',
+                                             command = self._cancel_clicked)
+        self._cancel_button.grid(row = 6, column = 2, padx = 10, pady = 10, sticky = tkinter.W)
+
+
+        self._root_window.rowconfigure(0, weight = 1)
+        self._root_window.rowconfigure(1, weight = 1)
+        self._root_window.rowconfigure(2, weight = 1)
+        self._root_window.rowconfigure(3, weight = 1)
+        self._root_window.rowconfigure(4, weight = 1)
+        self._root_window.rowconfigure(5, weight = 1)
+        self._root_window.columnconfigure(0, weight = 1)
+        self._root_window.columnconfigure(2, weight = 1)
+        self._root_window.columnconfigure(1, weight = 1)
+    def dim(self):
+        if self._row == 4:
+            self.ratio =125
+        elif self._row == 6:
+            self.ratio = 85          
+        elif self._row == 8:
+            self.ratio =62       
+        elif self._row == 10:
+            self.ratio = 50  
+        elif self._row == 12:
+            self.ratio = 41
+        elif self._row == 14:
+            self.ratio = 35
+        elif self._row == 16:
+            self.ratio = 25
+    def _ok_clicked(self):
+         self._row = self._prerownum.get()
+         self._column = self._precolnum.get()
+         self._topleft = self._pretopleft.get()
+         self._dropfirst1 = self._movefirst.get()
+         if self._dropfirst1 == 'black':
+             self._dropfirst2 = 'B'
+         else:
+             self._dropfirst2 = 'W'
+         self._wingame = self._winway.get()
+         self.dim()
+
+         self._root_window.destroy()
+         self.board = g._gameboard(self._row, self._column, '.')
+         self.sides = ['.', 'W', 'B']
+         self.turn  = g.turn_determine(self._dropfirst1)
+         self.state = g.game_logic(self._row, self._column, self._topleft, self._dropfirst2, self.board, self.sides)
+         self.new_board = g.set_discs(self.board, self._topleft, self._row, self._column)
+         self.blackpiece = g.count_pieces(self.new_board, self.sides[2])
+         self.whitepiece = g.count_pieces(self.new_board, self.sides[1])
+         self.game_window()
+         self.display()
+
+
+    def _cancel_clicked(self):
+        self._root_window.destroy() 
+       
+    def game_window(self):
+        self._root_window = tkinter.Tk()
+        self.game_window = tkinter.Canvas(master = self._root_window,
+                                           width = 500,
+                                           height = 500,
+                                           background ='#FFB63B')
+        self.game_window.grid(
+            row = 1, column = 0, padx = 10, pady = 10,
+            sticky = tkinter.NSEW)
+
+        
+        self.game_window.bind('<Configure>', self._on_canvas_resized)
+        self.game_window.bind('<Button-1>', self._on_canvas_clicked)
+
+        self._root_window.rowconfigure(1, weight = 1)
+        self._root_window.columnconfigure(0, weight = 1)
+
+    def _on_canvas_resized(self, event:tkinter.Event):
+        for i in range(1,self._column+1):
+            val = i*self.ratio
+            line = self.game_window.create_line(0, val, 500, val)
+            line = self.game_window.create_line(val, 0, val, 500)
+            self.blackpiece = g.count_pieces(self.new_board, self.sides[2])
+            self.whitepiece = g.count_pieces(self.new_board, self.sides[1])
+            self.game_info = tkinter.Label(master = self._root_window,
+                         text = 'Black:{}  white:{}  Turn:{}'.format(self.blackpiece,self.whitepiece,fullname(self.turn)),
+                         font = _font,
+                         fg = 'black')
+            self.game_info.grid(row = 0, column = 0, padx = 10, pady = 10, sticky = tkinter.N)
+
+    def _on_canvas_clicked(self,event:tkinter.Event):
+
+        x = int(event.x/self.ratio)
+        y = int(event.y/self.ratio)
+
+        try:
+            self.state.check_move()
+            try:
+                self.turn = self.state.make_move(y+1,x+1)
+                self.display()
+                self.blackpiece = g.count_pieces(self.new_board, self.sides[2])
+                self.whitepiece = g.count_pieces(self.new_board, self.sides[1])
+                self.game_info = tkinter.Label(master = self._root_window,
+                             text = 'Black:{}  white:{}  Turn:{}'.format(self.blackpiece,self.whitepiece,fullname(self.turn)),
+                             font = _font,
+                             fg = 'black')
+                self.game_info.grid(row = 0, column = 0, padx = 10, pady = 10, sticky = tkinter.N)
+                try:
+                    self.state.check_move()
+                except:
+                    self.turn = self.state._turn
+                    self.display()
+                    try:
+                        self.state.check_move()
+                    except:
+                        self.winner()
+                        self.game_window.destroy()
+                    
+            except:
+                self.error = tkinter.Toplevel()
+                self.message = tkinter.Label(master = self.error,
+                                             text = 'Invalid move, Please try again.',
+                                             font = _font)
+                self.message.grid(row = 0, column = 1, padx = 10, pady = 10, sticky = tkinter.N)
+        except:
+            self.winner()
+            self.game_window.destroy()
+
+
+    def winner(self):
+        self.final_window = tkinter.Toplevel()
+        if self._wingame == 'More pieces player win':
+            if self.blackpiece > self.whitepiece:
+                self.result = tkinter.Label(master = self.final_window,
+                                                     text = 'GAME OVER!!\nBlack wins',
+                                                     font = _font)
+                self.result.grid(row = 0, column = 0, padx = 10, pady = 10, sticky = tkinter.N)
+
+            elif self.blackpiece < self.whitepiece:
+                self.result = tkinter.Label(master = self.final_window,
+                                                     text = 'GAME OVER!!\nWhite wins',
+                                                     font = _font)
+                self.result.grid(row = 0, column = 1, padx = 10, pady = 10, sticky = tkinter.N)
+            else:
+                self.result = tkinter.Label(master = self.final_window,
+                                                     text = 'GAME OVER!!\n TIE',
+                                                     font = _font)
+                self.result.grid(row = 0, column = 1, padx = 10, pady = 10, sticky = tkinter.N)
+
+    def showPiece(self, x, y, col):
+        d = self.ratio
+        if col == 1:
+            color = "white"
+        elif col == -1:
+            color = "black"
+        oval = self.game_window.create_oval(y*d,x*d,(y+1)*d,(x+1)*d,fill=color)
+        
+    def display(self):
+        for i in range(self._row):
+            for j in range(self._column):
+                if self.board[i][j] == 'B':
+                    self.showPiece(i,j,-1)
+                if self.board[i][j] == 'W':
+                    self.showPiece(i,j,1)
+        
+
+
+
+
+
+    def start(self):
+        self._root_window.mainloop()
+        
+
+
+
+def fullname(turn:str):
+        if turn == 'B':
+            return 'Black'
+        elif turn == 'W':
+            return 'white'
+
+
+if __name__=='__main__':
+    window = open_window()
+    window.start()
+    
