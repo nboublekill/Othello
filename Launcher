@@ -1,0 +1,5 @@
+Ming Sun
+from OthelloConfigInterface import ConfigInterface
+if __name__=="__main__":
+	Config_UI=ConfigInterface()
+	Config_UI.start()
