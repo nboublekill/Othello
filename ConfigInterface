@@ -1,0 +1,74 @@
+Ming Sun
+
+from tkinter import Tk,StringVar,Label,Spinbox,ttk,messagebox
+from OthelloWindow import OthelloGUI
+class ConfigInterface:
+        def __init__(self):
+
+                self._baseWidget=Tk()
+                self._baseWidget.title("Config Interface")
+
+                self.Row=StringVar(master=self._baseWidget)
+                self.Col=StringVar(master=self._baseWidget)
+                self.First=StringVar(master=self._baseWidget)
+                self.TopLeft=StringVar(master=self._baseWidget)
+                self.Win=StringVar(master=self._baseWidget)
+
+                self._Row_Entry_Label=Label(master=self._baseWidget,text="Row: ")
+                self._Row_Entry_Label.place(relx=0,rely=0.1,relwidth=0.2,relheight=0.2)
+                self._Row_Entry=Spinbox(master=self._baseWidget,textvariable=self.Row,values=(4,6,8,10,12,14,16))
+                self._Row_Entry.place(relx=0.21,rely=0.1,relwidth=0.23,relheight=0.2)
+
+                self._Col_Entry_Label=Label(master=self._baseWidget,text="Column: ")
+                self._Col_Entry_Label.place(relx=0.45,rely=0.1,relwidth=0.2,relheight=0.2)
+                self._Col_Entry=Spinbox(master=self._baseWidget,textvariable=self.Col,values=(4,6,8,10,12,14,16))
+                self._Col_Entry.place(relx=0.68,rely=0.1,relwidth=0.23,relheight=0.2)
+
+                self._First_Option_Label=Label(master=self._baseWidget,text="First:")
+                self._First_Option_Label.place(relx=0,rely=0.42,relwidth=0.2,relheight=0.2)
+                self._First_Option=ttk.OptionMenu(self._baseWidget,self.First,"Black","Black","White")
+                self._First_Option.place(relx=0.21,rely=0.42,relwidth=0.23,relheight=0.2)
+
+                self._TopLeft_Option_Label=Label(master=self._baseWidget,text="TopLeft:")
+                self._TopLeft_Option_Label.place(relx=0.45,rely=0.42,relwidth=0.2,relheight=0.2)
+                self._TopLeft_Option=ttk.OptionMenu(self._baseWidget,self.TopLeft,"Black ","Black ","White ")
+                self._TopLeft_Option.place(relx=0.68,rely=0.42,relwidth=0.23,relheight=0.2)
+
+                self._Win_Option_Label=Label(master=self._baseWidget,text="Goal:")
+                self._Win_Option_Label.place(relx=0.0,rely=0.7,relwidth=0.2,relheight=0.2)
+                self._Win_Option=ttk.OptionMenu(self._baseWidget,self.Win,"More Dics","Less Dics","More Dics")
+                self._Win_Option.place(relx=0.21,rely=0.7,relwidth=0.23,relheight=0.2)
+
+                self._Start_Btn=ttk.Button(master=self._baseWidget,text="Start",command=self._start_game)
+                self._Start_Btn.place(relx=0.6,rely=0.7,relwidth=0.25,relheight=0.2)
+
+                self._baseWidget.update()
+                self._baseWidget.geometry("400x150")
+                self._baseWidget.resizable(width=False, height=False)
+
+        def start(self):
+                self._baseWidget.mainloop()
+
+        def showmessage(self,func,*args):
+                return func(*args,master=self._baseWidget)
+
+        def _start_game(self):
+                try:
+                        rol=int(self.Row.get())
+                        col=int(self.Col.get())
+                        first=self.First.get()[0].lower()
+                        topleft=self.TopLeft.get()[0].lower()
+                        if self.Win.get()[0]=="M":
+                                goal=lambda a,b:a>b
+                        else:
+                                goal=lambda a,b:a<b
+                        Game=OthelloGUI(rol,col,topleft,first,goal)
+                        self._baseWidget.destroy()
+                        Game.start()
+                        del(self)
+                except Exception as e:
+                        self._baseWidget.after(10,self.showmessage,messagebox.showwarning,"Can't Create Game",str(e))
+
+
+
+
